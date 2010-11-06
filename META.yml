@@ -1,0 +1,27 @@
+---
+abstract: 'Libraries shared between L<Net::OpenID::Consumer> and L<Net::OpenID::Server>'
+author:
+  - 'Robert Norris <rob@eatenbyagrue.org>'
+build_requires:
+  Test::More: 0
+configure_requires:
+  ExtUtils::MakeMaker: 6.31
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 4.102342, CPAN::Meta::Converter version 2.102400'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Net-OpenID-Common
+requires:
+  Crypt::DH::GMP: 0
+  HTTP::Request: 0
+  HTTP::Status: 0
+  MIME::Base64: 0
+  Math::BigInt: 0
+  Time::Local: 0
+  XML::Simple: 0
+resources:
+  bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Net-OpenID-Common
+  repository: git://github.com/robn/Net-OpenID-Common.git
+version: 1.030099_001

@@ -1,0 +1,53 @@
+{
+   "abstract" : "Libraries shared between L<Net::OpenID::Consumer> and L<Net::OpenID::Server>",
+   "author" : [
+      "Robert Norris <rob@eatenbyagrue.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 4.102342, CPAN::Meta::Converter version 2.102400",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Net-OpenID-Common",
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.31"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Crypt::DH::GMP" : 0,
+            "HTTP::Request" : 0,
+            "HTTP::Status" : 0,
+            "MIME::Base64" : 0,
+            "Math::BigInt" : 0,
+            "Time::Local" : 0,
+            "XML::Simple" : 0
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Test::More" : 0
+         }
+      }
+   },
+   "release_status" : "testing",
+   "resources" : {
+      "bugtracker" : {
+         "mailto" : "bug-net-openid-common@rt.cpan.org",
+         "web" : "http://rt.cpan.org/NoAuth/Bugs.html?Dist=Net-OpenID-Common"
+      },
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/robn/Net-OpenID-Common.git",
+         "web" : "http://github.com/robn/Net-OpenID-Common"
+      }
+   },
+   "version" : "1.030099_001"
+}
+
