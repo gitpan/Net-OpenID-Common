@@ -1,7 +1,7 @@
 
 package Net::OpenID::IndirectMessage;
 BEGIN {
-  $Net::OpenID::IndirectMessage::VERSION = '1.030099_001';
+  $Net::OpenID::IndirectMessage::VERSION = '1.030099_002';
 }
 
 use strict;
@@ -209,7 +209,7 @@ Net::OpenID::IndirectMessage - Class representing a collection of namespaced arg
 
 =head1 VERSION
 
-version 1.030099_001
+version 1.030099_002
 
 =head1 DESCRIPTION
 

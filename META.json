@@ -1,10 +1,10 @@
 {
-   "abstract" : "Libraries shared between L<Net::OpenID::Consumer> and L<Net::OpenID::Server>",
+   "abstract" : "Libraries shared between Net::OpenID::Consumer and Net::OpenID::Server",
    "author" : [
       "Robert Norris <rob@eatenbyagrue.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.102342, CPAN::Meta::Converter version 2.102400",
+   "generated_by" : "Dist::Zilla version 4.102343, CPAN::Meta::Converter version 2.102400",
    "license" : [
       "perl_5"
    ],
@@ -42,12 +42,13 @@
          "mailto" : "bug-net-openid-common@rt.cpan.org",
          "web" : "http://rt.cpan.org/NoAuth/Bugs.html?Dist=Net-OpenID-Common"
       },
+      "homepage" : "http://groups.google.com/group/openid-perl",
       "repository" : {
          "type" : "git",
          "url" : "git://github.com/robn/Net-OpenID-Common.git",
          "web" : "http://github.com/robn/Net-OpenID-Common"
       }
    },
-   "version" : "1.030099_001"
+   "version" : "1.030099_002"
 }
 

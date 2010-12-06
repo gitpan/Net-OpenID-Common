@@ -1,16 +1,16 @@
 
 package Net::OpenID::Common;
 BEGIN {
-  $Net::OpenID::Common::VERSION = '1.030099_001';
+  $Net::OpenID::Common::VERSION = '1.030099_002';
 }
 
 =head1 NAME
 
-Net::OpenID::Common - Libraries shared between L<Net::OpenID::Consumer> and L<Net::OpenID::Server>
+Net::OpenID::Common - Libraries shared between Net::OpenID::Consumer and Net::OpenID::Server
 
 =head1 VERSION
 
-version 1.030099_001
+version 1.030099_002
 
 =head1 DESCRIPTION
 
@@ -33,7 +33,7 @@ Maintained by Martin Atkins <mart@degeneration.co.uk>
 # like this to avoid confusion.
 package OpenID::util;
 BEGIN {
-  $OpenID::util::VERSION = '1.030099_001';
+  $OpenID::util::VERSION = '1.030099_002';
 }
 
 use Crypt::DH::GMP;
@@ -79,7 +79,7 @@ sub parse_keyvalue {
 sub ejs
 {
     my $a = $_[0];
-    $a =~ s/[\"\'\\]/\\$&/g;
+    $a =~ s/([\"\'\\])/\\$1/g;
     $a =~ s/\r?\n/\\n/gs;
     $a =~ s/\r//;
     return $a;
