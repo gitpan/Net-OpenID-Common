@@ -30,7 +30,7 @@ my %WriteMakefileArgs = (
     'Time::Local' => '0',
     'XML::Simple' => '0'
   },
-  'VERSION' => '1.030099_002',
+  'VERSION' => '1.030099_003',
   'test' => {
     'TESTS' => 't/*.t'
   }

@@ -1,7 +1,7 @@
 
 package Net::OpenID::Common;
 BEGIN {
-  $Net::OpenID::Common::VERSION = '1.030099_002';
+  $Net::OpenID::Common::VERSION = '1.030099_003';
 }
 
 =head1 NAME
@@ -10,7 +10,7 @@ Net::OpenID::Common - Libraries shared between Net::OpenID::Consumer and Net::Op
 
 =head1 VERSION
 
-version 1.030099_002
+version 1.030099_003
 
 =head1 DESCRIPTION
 
@@ -33,13 +33,14 @@ Maintained by Martin Atkins <mart@degeneration.co.uk>
 # like this to avoid confusion.
 package OpenID::util;
 BEGIN {
-  $OpenID::util::VERSION = '1.030099_002';
+  $OpenID::util::VERSION = '1.030099_003';
 }
 
 use Crypt::DH::GMP;
 use Math::BigInt;
 use Time::Local ();
 use MIME::Base64 ();
+use URI::Escape ();
 
 use constant VERSION_1_NAMESPACE => "http://openid.net/signon/1.1";
 use constant VERSION_2_NAMESPACE => "http://specs.openid.net/auth/2.0";
@@ -76,35 +77,6 @@ sub parse_keyvalue {
     return %ret;
 }
 
-sub ejs
-{
-    my $a = $_[0];
-    $a =~ s/([\"\'\\])/\\$1/g;
-    $a =~ s/\r?\n/\\n/gs;
-    $a =~ s/\r//;
-    return $a;
-}
-
-# Data::Dumper for JavaScript
-sub js_dumper {
-    my $obj = shift;
-    if (ref $obj eq "HASH") {
-        my $ret = "{";
-        foreach my $k (keys %$obj) {
-            $ret .= "$k: " . js_dumper($obj->{$k}) . ",";
-        }
-        chop $ret;
-        $ret .= "}";
-        return $ret;
-    } elsif (ref $obj eq "ARRAY") {
-        my $ret = "[" . join(", ", map { js_dumper($_) } @$obj) . "]";
-        return $ret;
-    } else {
-        return $obj if $obj =~ /^\d+$/;
-        return "\"" . ejs($obj) . "\"";
-    }
-}
-
 sub eurl
 {
     my $a = $_[0];
@@ -122,7 +94,7 @@ sub push_url_arg {
         my $key = shift;
         my $value = shift;
         $$uref .= $got_qmark ? "&" : ($got_qmark = 1, "?");
-        $$uref .= eurl($key) . "=" . eurl($value);
+        $$uref .= URI::Escape::uri_escape($key) . "=" . URI::Escape::uri_escape($value);
     }
 }
 

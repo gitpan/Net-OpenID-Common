@@ -1,3 +1,10 @@
+1.030099_003 Jan 01 2011
+
+    * Replace URL escaper with calls to URI::Escape (Robert Norris)
+
+    * Removed JSON encoder in favour of using JSON::encode_json directly in
+      N::O::Server and N::O::Consumer (Robert Norris)
+
 1.030099_002 Dec 07 2010
 
     * Documentation tweaks (Robert Norris)

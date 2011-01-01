@@ -20,4 +20,3 @@ t/03-use-common.t
 t/04-messages.t
 t/05-eq.t
 t/06-int2bytes.t
-t/07-ejs.t
