@@ -1,7 +1,7 @@
 
 package Net::OpenID::Yadis::Service;
 BEGIN {
-  $Net::OpenID::Yadis::Service::VERSION = '1.030099_003';
+  $Net::OpenID::Yadis::Service::VERSION = '1.030099_004';
 }
 
 use strict;
@@ -27,7 +27,7 @@ Net::OpenID::Yadis::Service - Class representing an XRDS Service element
 
 =head1 VERSION
 
-version 1.030099_003
+version 1.030099_004
 
 =head1 SYNOPSIS
 
@@ -69,6 +69,8 @@ The URI of the service endpoint.
 Fetch the value of extension fields not provided directly by this class.
 
 If C<$namespace> is not specified, the default is the namespace whose name is the empty string.
+
+=back
 
 =head1 COPYRIGHT, WARRANTY, AUTHOR
 

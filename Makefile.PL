@@ -10,7 +10,7 @@ use ExtUtils::MakeMaker 6.31;
 
 my %WriteMakefileArgs = (
   'ABSTRACT' => 'Libraries shared between Net::OpenID::Consumer and Net::OpenID::Server',
-  'AUTHOR' => 'Robert Norris <rob@eatenbyagrue.org>',
+  'AUTHOR' => 'Robert Norris <rob@eatenbyagrue.org>, Roger Crew <crew@cs.stanford.edu>',
   'BUILD_REQUIRES' => {
     'Test::More' => '0'
   },
@@ -30,7 +30,7 @@ my %WriteMakefileArgs = (
     'Time::Local' => '0',
     'XML::Simple' => '0'
   },
-  'VERSION' => '1.030099_003',
+  'VERSION' => '1.030099_004',
   'test' => {
     'TESTS' => 't/*.t'
   }

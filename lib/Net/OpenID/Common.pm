@@ -1,7 +1,7 @@
 
 package Net::OpenID::Common;
 BEGIN {
-  $Net::OpenID::Common::VERSION = '1.030099_003';
+  $Net::OpenID::Common::VERSION = '1.030099_004';
 }
 
 =head1 NAME
@@ -10,7 +10,7 @@ Net::OpenID::Common - Libraries shared between Net::OpenID::Consumer and Net::Op
 
 =head1 VERSION
 
-version 1.030099_003
+version 1.030099_004
 
 =head1 DESCRIPTION
 
@@ -33,7 +33,7 @@ Maintained by Martin Atkins <mart@degeneration.co.uk>
 # like this to avoid confusion.
 package OpenID::util;
 BEGIN {
-  $OpenID::util::VERSION = '1.030099_003';
+  $OpenID::util::VERSION = '1.030099_004';
 }
 
 use Crypt::DH::GMP;
@@ -178,7 +178,10 @@ sub arg2int {
 }
 
 sub timing_indep_eq {
+    no warnings 'uninitialized';
     my ($x, $y)=@_;
+    warnings::warn('uninitialized','Use of uninitialized value in timing_indep_eq')
+	if (warnings::enabled('uninitialized') && !(defined($x) && defined($y)));
 
     return '' if length($x)!=length($y);
 
@@ -204,6 +207,24 @@ sub get_dh {
     $dh->generate_keys;
 
     return $dh;
+}
+
+# HTML parsing
+sub _extract_head_markup_only {
+    my $htmlref = shift;
+
+    # kill all CDATA sections
+    $$htmlref =~ s/<!\[CDATA\[.*?\]\]>//sg;
+
+    # kill all comments
+    $$htmlref =~ s/<!--.*?-->//sg;
+    # ***FIX?*** Strictly speaking, SGML comments must have matched
+    # pairs of '--'s but almost nobody checks for this or even knows 
+
+    # trim everything past the body.  this is in case the user doesn't
+    # have a head document and somebody was able to inject their own
+    # head.  -- brad choate
+    $$htmlref =~ s/<body\b.*//is;
 }
 
 1;
