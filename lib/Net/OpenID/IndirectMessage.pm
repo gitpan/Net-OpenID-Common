@@ -1,7 +1,7 @@
 
 package Net::OpenID::IndirectMessage;
 BEGIN {
-  $Net::OpenID::IndirectMessage::VERSION = '1.030099_004';
+  $Net::OpenID::IndirectMessage::VERSION = '1.11';
 }
 
 use strict;
@@ -49,6 +49,11 @@ sub new {
         # the spec requires.
         $getter = sub { scalar $what->param($_[0]); };
         $enumer = sub { $what->param; };
+    }
+    elsif (ref $what eq "Plack::Request") {
+        my $p = $what->method eq 'POST' ? $what->body_parameters : $what->query_parameters;
+        $getter = sub { $p->get($_[0]); };
+        $enumer = sub { keys %{$p}; };
     }
     elsif (ref $what eq "CODE") {
         $getter = $what;
@@ -209,52 +214,55 @@ Net::OpenID::IndirectMessage - Class representing a collection of namespaced arg
 
 =head1 VERSION
 
-version 1.030099_004
+version 1.11
 
 =head1 DESCRIPTION
 
 This class acts as an abstraction layer over a collection of flat URL arguments
 which supports namespaces as defined by the OpenID Auth 2.0 specification.
 
-It also recognises when its is given OpenID 1.1 non-namespaced arguments and
+It also recognises when it is given OpenID 1.1 non-namespaced arguments and
 acts as if the relevant namespaces were present. In this case, it only
 supports the basic OpenID 1.1 arguments and the extension arguments
 for Simple Registration.
 
-This class can operate on a normal hashref, a L<CGI> object, an L<Apache>
-object, an L<Apache::Request> object, an L<Apache2::Request> object or an
-arbitrary C<CODE> ref that takes a key name as its first parameter and returns
-a value. However, if you use a coderef then extension arguments are not
-supported.
+This class can operate on
+a normal hashref,
+a L<CGI> object,
+an L<Apache> object,
+an L<Apache::Request> object,
+an L<Apache2::Request> object,
+a L<Plack::Request> object, or
+an arbitrary C<CODE> ref that takes a key name as its first parameter and returns a value.
+However, if you use a coderef then extension arguments are not supported.
 
 If you pass in a hashref or a coderef it is your responsibility as the caller
-to check the HTTP request method and pass in the correct set of arguments. If
-you use an Apache, Apache::Request, Apache2::Request or CGI object then this
-module will do the right thing automatically.
+to check the HTTP request method and pass in the correct set of arguments.
+For the other kinds of objects, this module will do the right thing automatically.
 
 =head1 SYNOPSIS
 
     use Net::OpenID::IndirectMessage;
-    
+
     # Pass in something suitable for the underlying flat dictionary.
     # Will return an instance if the request arguments can be understood
     # as a supported OpenID Message format.
     # Will return undef if this doesn't seem to be an OpenID Auth message.
     # Will croak if the $argumenty_thing is not of a suitable type.
     my $args = Net::OpenID::IndirectMessage->new($argumenty_thing);
-    
+
     # Determine which protocol version the message is using.
     # Currently this can be either 1 for 1.1 or 2 for 2.0.
     # Expect larger numbers for other versions in future.
     # Most callers don't really need to care about this.
     my $version = $args->protocol_version();
-    
+
     # Get a core argument value ("openid.mode")
     my $mode = $args->get("mode");
-    
+
     # Get an extension argument value
     my $nickname = $args->get_ext("http://openid.net/extensions/sreg/1.1", "nickname");
-    
+
     # Get hashref of all arguments in a given namespace
     my $sreg = $args->get_ext("http://openid.net/extensions/sreg/1.1");
 

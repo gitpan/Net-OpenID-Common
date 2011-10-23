@@ -37,7 +37,7 @@
          }
       }
    },
-   "release_status" : "testing",
+   "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
          "mailto" : "bug-net-openid-common@rt.cpan.org",
@@ -50,6 +50,6 @@
          "web" : "http://github.com/wrog/Net-OpenID-Common"
       }
    },
-   "version" : "1.030099_004"
+   "version" : "1.11"
 }
 
