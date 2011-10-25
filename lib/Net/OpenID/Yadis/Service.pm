@@ -1,7 +1,7 @@
 
 package Net::OpenID::Yadis::Service;
 BEGIN {
-  $Net::OpenID::Yadis::Service::VERSION = '1.11';
+  $Net::OpenID::Yadis::Service::VERSION = '1.12';
 }
 
 use strict;
@@ -27,7 +27,7 @@ Net::OpenID::Yadis::Service - Class representing an XRDS Service element
 
 =head1 VERSION
 
-version 1.11
+version 1.12
 
 =head1 SYNOPSIS
 

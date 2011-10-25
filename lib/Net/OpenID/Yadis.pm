@@ -1,6 +1,6 @@
 package Net::OpenID::Yadis;
 BEGIN {
-  $Net::OpenID::Yadis::VERSION = '1.11';
+  $Net::OpenID::Yadis::VERSION = '1.12';
 }
 
 use strict;
@@ -112,7 +112,11 @@ sub _get_contents {
     my $self = shift;
     my  ($url, $final_url_ref, $content_ref, $headers_ref) = @_;
 
-    my $res = Net::OpenID::URIFetch->fetch($url, $self->consumer, \&OpenID::util::_extract_head_markup_only);
+    # we do NOT do <body> elimination here because
+    # if it's an HTML document, we are only ever looking at the headers, and
+    # if it's a YADIS document, <body> elimination is not appropriate
+    # (YADIS is not HTML; film at 11)
+    my $res = Net::OpenID::URIFetch->fetch($url, $self->consumer);
 
     if ($res) {
         $$final_url_ref = $res->final_uri;
@@ -147,13 +151,23 @@ sub discover {
 
     $self->identity_url($final_url) if ($count < YR_XRDS);
 
-    my $doc_url;
-    if (($doc_url = $headers{'x-yadis-location'} || $headers{'x-xrds-location'}) && ($count < YR_XRDS)) {
+    if ($count < YR_XRDS and
+        my $doc_url = $headers{'x-yadis-location'} || $headers{'x-xrds-location'}
+       ) {
         return $self->discover($doc_url, YR_XRDS);
     }
-    elsif ( (split /;\s*/, $headers{'content-type'})[0] eq 'application/xrds+xml') {
+    elsif ( (my $ctype = (split /;\s*/, $headers{'content-type'})[0]) eq 'application/xrds+xml') {
         $self->xrd_url($final_url);
         return $self->parse_xrd($xrd);
+    }
+    elsif ( $ctype eq 'text/html' and
+            my ($meta) = grep {
+                my $heqv = lc($_->{'http-equiv'}||'');
+                $heqv eq 'x-yadis-location' || $heqv eq 'x-xrds-location'
+            }
+            @{OpenID::util::html_extract_linkmetas($xrd)->{meta}||[]}
+          ) {
+        return $self->discover($meta->{content}, YR_XRDS);
     }
     else {
         return $self->_fail($count == YR_GET ? "no_yadis_document" : "too_many_hops");
@@ -244,7 +258,7 @@ Net::OpenID::Yadis - Perform Yadis discovery on URLs
 
 =head1 VERSION
 
-version 1.11
+version 1.12
 
 =head1 SYNOPSIS
 
