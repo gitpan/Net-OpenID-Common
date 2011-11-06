@@ -6,7 +6,7 @@ Net::OpenID::URIFetch - fetch and cache content from HTTP URLs
 
 =head1 VERSION
 
-version 1.12
+version 1.13
 
 =head1 DESCRIPTION
 
@@ -24,7 +24,7 @@ isn't much use outside of it. See URI::Fetch for a more general module.
 
 package Net::OpenID::URIFetch;
 BEGIN {
-  $Net::OpenID::URIFetch::VERSION = '1.12';
+  $Net::OpenID::URIFetch::VERSION = '1.13';
 }
 
 use HTTP::Request;
@@ -72,6 +72,15 @@ sub fetch {
             $ref = Storable::thaw($blob);
         }
     }
+    my $cached_response = sub {
+        return Net::OpenID::URIFetch::Response->new(
+            status => 200,
+            content => $ref->{Content},
+            last_modified => $ref->{LastModified},
+            headers => $ref->{Headers},
+            final_uri => $ref->{FinalURI},
+        );
+    };
 
     # We just serve anything from the last 60 seconds right out of the cache,
     # thus avoiding doing several requests to the same URL when we do
@@ -79,12 +88,7 @@ sub fetch {
     # TODO: Make this tunable?
     if ($ref && $ref->{CacheTime} > (time() - 60)) {
         $consumer->_debug("Cache HIT for $uri");
-        return Net::OpenID::URIFetch::Response->new(
-            status => 200,
-            content => $ref->{Content},
-            headers => $ref->{Headers},
-            final_uri => $ref->{FinalURI},
-        );
+        return $cached_response->();
     }
     else {
         $consumer->_debug("Cache MISS for $uri");
@@ -98,7 +102,7 @@ sub fetch {
         if (my $etag = ($ref->{Headers}->{etag})) {
             $req->header('If-None-Match', $etag);
         }
-        if (my $ts = ($ref->{Headers}->{'last-modified'})) {
+        if (my $ts = $ref->{LastModified}) {
             $req->if_modified_since($ts);
         }
     }
@@ -112,12 +116,7 @@ sub fetch {
 
     if ($res->code == HTTP::Status::RC_NOT_MODIFIED()) {
         $consumer->_debug("Server says it's not modified. Serving from cache.");
-        return Net::OpenID::URIFetch::Response->new(
-            status => 200,
-            content => $ref->{Content},
-            headers => $ref->{Headers},
-            final_uri => $ref->{FinalURI},
-        );
+        return $cached_response->();
     }
     else {
         my $content = $res->content;
@@ -139,6 +138,7 @@ sub fetch {
 
         my $ret = Net::OpenID::URIFetch::Response->new(
             status => $res->code,
+            last_modified => $res->last_modified,
             content => $content,
             headers => $headers,
             final_uri => $final_uri,
@@ -146,6 +146,7 @@ sub fetch {
 
         if ($cache && $res->code == 200) {
             my $cache_data = {
+                LastModified => $ret->last_modified,
                 Headers => $ret->headers,
                 Content => $ret->content,
                 CacheTime => time(),
@@ -163,35 +164,28 @@ sub fetch {
 
 package Net::OpenID::URIFetch::Response;
 BEGIN {
-  $Net::OpenID::URIFetch::Response::VERSION = '1.12';
+  $Net::OpenID::URIFetch::Response::VERSION = '1.13';
 }
+
+use strict;
+use constant FIELDS => [qw(final_uri status content headers last_modified)];
+use fields @{FIELDS()};
+use Carp();
 
 sub new {
     my ($class, %opts) = @_;
-
-    my $self = {};
-    $self->{final_uri} = delete($opts{final_uri});
-    $self->{status} = delete($opts{status});
-    $self->{content} = delete($opts{content});
-    $self->{headers} = delete($opts{headers});
-
-    return bless $self, $class;
+    my $self = fields::new($class);
+    @{$self}{@{FIELDS()}} = delete @opts{@{FIELDS()}};
+    Carp::croak("Unknown option(s): " . join(", ", keys %opts)) if %opts;
+    return $self;
 }
 
-sub final_uri {
-    return $_[0]->{final_uri};
-}
-
-sub status {
-    return $_[0]->{status};
-}
-
-sub content {
-    return $_[0]->{content};
-}
-
-sub headers {
-    return $_[0]->{headers};
+BEGIN {
+    foreach my $field_name (@{FIELDS()}) {
+        no strict 'refs';
+        *{__PACKAGE__ . '::' . $field_name}
+          = sub { return $_[0]->{$field_name}; };
+    }
 }
 
 sub header {

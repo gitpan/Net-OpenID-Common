@@ -1,6 +1,6 @@
 package Net::OpenID::Yadis;
 BEGIN {
-  $Net::OpenID::Yadis::VERSION = '1.12';
+  $Net::OpenID::Yadis::VERSION = '1.13';
 }
 
 use strict;
@@ -12,6 +12,8 @@ use Net::OpenID::URIFetch;
 use XML::Simple;
 use Net::OpenID::Yadis::Service;
 use Net::OpenID::Common;
+use Email::MIME::ContentType;
+use Encode;
 
 our @EXPORT = qw(YR_HEAD YR_GET YR_XRDS);
 
@@ -151,16 +153,40 @@ sub discover {
 
     $self->identity_url($final_url) if ($count < YR_XRDS);
 
+    # (1) found YADIS/XRDS-Location headers
     if ($count < YR_XRDS and
         my $doc_url = $headers{'x-yadis-location'} || $headers{'x-xrds-location'}
        ) {
         return $self->discover($doc_url, YR_XRDS);
     }
-    elsif ( (my $ctype = (split /;\s*/, $headers{'content-type'})[0]) eq 'application/xrds+xml') {
+
+    # (2) is content type YADIS document?
+    my $pct = parse_content_type($headers{'content-type'});
+    my $ctype = join '/', @{$pct}{qw(discrete composite)}; # really should be qw(type subtype)
+    if ($ctype eq 'application/xrds+xml') {
+        #survey says Yes!
         $self->xrd_url($final_url);
+
+        my $charset = $pct->{attributes}->{charset};
+        if ($charset && (lc($charset) ne 'utf-8') && Encode::find_encoding($charset)) {
+            # not UTF-8, but it's one of the ones we know about, so...
+            Encode::from_to($xrd,$charset,'utf-8');
+            # And now we are UTF-8, BUT...
+            # XML spec requires specifying the encoding in the prolog
+            # whenever it's not UTF-8 *and* death if the specified encoding
+            # doesn't match the actual encoding, so we have to fix the prolog
+            my $encoding_re = qr/\s+encoding\s*=\s*['"][A-Z][-A-Za-z0-9._]*["']/;
+            $xrd =~ s/$encoding_re//
+              # but make sure there *is* a prolog, first; also allow for the
+              # possibility of BOM (byte-order mark) re-encoding into
+              # garbage at the beginning
+              if ($xrd =~ m/\A.{0,4}<?xml\s+version\s*=\s*['"][0-9.]+["']$encoding_re/);
+        }
         return $self->parse_xrd($xrd);
     }
-    elsif ( $ctype eq 'text/html' and
+
+    # (3) YADIS/XRDS-location might be in a <meta> tag.
+    if ( $ctype eq 'text/html' and
             my ($meta) = grep {
                 my $heqv = lc($_->{'http-equiv'}||'');
                 $heqv eq 'x-yadis-location' || $heqv eq 'x-xrds-location'
@@ -169,9 +195,7 @@ sub discover {
           ) {
         return $self->discover($meta->{content}, YR_XRDS);
     }
-    else {
-        return $self->_fail($count == YR_GET ? "no_yadis_document" : "too_many_hops");
-    }
+    return $self->_fail($count == YR_GET ? "no_yadis_document" : "too_many_hops");
 }
 
 sub parse_xrd {
@@ -236,7 +260,7 @@ sub services {
     my @servers;
     @servers = $self->xrd_objects if (keys %protocols == 0);
     foreach my $key (@protocols) {
-        my $regex = $protocols{$key}->{urlregex} || $key; 
+        my $regex = $protocols{$key}->{urlregex} || $key;
         my @ver = @{$protocols{$key}->{versionarray}};
         my $ver_regex = @ver ? '('.join('|',map { $_ =~ s/\./\\./g; $_ } @ver).')' : '.+' ;
         $regex =~ s/\\ver/$ver_regex/;
@@ -258,12 +282,12 @@ Net::OpenID::Yadis - Perform Yadis discovery on URLs
 
 =head1 VERSION
 
-version 1.12
+version 1.13
 
 =head1 SYNOPSIS
 
   use Net::OpenID::Yadis;
-  
+
   my $disc = Net::OpenID::Yadis->new(
       consumer => $consumer, # Net::OpenID::Consumer object
   );
@@ -310,7 +334,7 @@ uses, L<Net::Yadis::Discovery> is probably a better choice.
 
 my $disc = Net::OpenID::Yadis->new([ %opts ]);
 
-You can set the C<consumer> in the constructor.  See the corresponding 
+You can set the C<consumer> in the constructor.  See the corresponding
 method description below.
 
 =back
@@ -348,7 +372,7 @@ Given a user-entered $url (which could be missing http://, or have
 extra whitespace, etc), returns either array/array ref of Net::OpenID::Yadis::Service
 objects, or undef on failure.
 
-$request_method is optional, and if set this, you can change the HTTP 
+$request_method is optional, and if set this, you can change the HTTP
 request method of fetching Yadis URL.
 See EXPORT to know the value you can set, and default is YR_HEAD.
 
@@ -409,7 +433,7 @@ filter only given version of protocol.
 Sample:
   $disc->servers("openid"=>['1.0','1.1'],"lid"=>['1.0']);
 
-If you want to use version numbers limitation with type URL, you can use 
+If you want to use version numbers limitation with type URL, you can use
 \ver as place holder of version number.
 
 Sample:
