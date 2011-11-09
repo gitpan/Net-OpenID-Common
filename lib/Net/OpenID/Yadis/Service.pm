@@ -1,7 +1,7 @@
 
 package Net::OpenID::Yadis::Service;
 BEGIN {
-  $Net::OpenID::Yadis::Service::VERSION = '1.13';
+  $Net::OpenID::Yadis::Service::VERSION = '1.14';
 }
 
 use strict;
@@ -27,7 +27,7 @@ Net::OpenID::Yadis::Service - Class representing an XRDS Service element
 
 =head1 VERSION
 
-version 1.13
+version 1.14
 
 =head1 SYNOPSIS
 
@@ -74,7 +74,7 @@ If C<$namespace> is not specified, the default is the namespace whose name is th
 
 =head1 COPYRIGHT, WARRANTY, AUTHOR
 
-See L<Net::OpenID::Yadis> for author, copyrignt and licensing information.
+See L<Net::OpenID::Yadis> for author, copyright and licensing information.
 
 =head1 SEE ALSO
 

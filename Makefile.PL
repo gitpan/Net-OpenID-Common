@@ -23,9 +23,9 @@ my %WriteMakefileArgs = (
   'NAME' => 'Net::OpenID::Common',
   'PREREQ_PM' => {
     'Crypt::DH::GMP' => '0',
-    'Email::MIME::ContentType' => '0',
     'Encode' => '0',
     'HTML::Parser' => '3.40',
+    'HTTP::Headers::Util' => '0',
     'HTTP::Request' => '0',
     'HTTP::Status' => '0',
     'MIME::Base64' => '0',
@@ -33,7 +33,7 @@ my %WriteMakefileArgs = (
     'Time::Local' => '0',
     'XML::Simple' => '0'
   },
-  'VERSION' => '1.13',
+  'VERSION' => '1.14',
   'test' => {
     'TESTS' => 't/*.t'
   }

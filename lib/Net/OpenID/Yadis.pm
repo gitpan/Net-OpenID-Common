@@ -1,6 +1,6 @@
 package Net::OpenID::Yadis;
 BEGIN {
-  $Net::OpenID::Yadis::VERSION = '1.13';
+  $Net::OpenID::Yadis::VERSION = '1.14';
 }
 
 use strict;
@@ -12,7 +12,7 @@ use Net::OpenID::URIFetch;
 use XML::Simple;
 use Net::OpenID::Yadis::Service;
 use Net::OpenID::Common;
-use Email::MIME::ContentType;
+use HTTP::Headers::Util qw(split_header_words);
 use Encode;
 
 our @EXPORT = qw(YR_HEAD YR_GET YR_XRDS);
@@ -134,6 +134,22 @@ sub _get_contents {
     }
 }
 
+sub parse_content_type {
+    # stolen from HTTP::Headers but returns lc charset
+    my $h = shift;
+    $h = $h->[0] if ref($h);
+    $h = "" unless defined $h;
+    my ($v) = (split_header_words($h), []);
+    my($ct, undef, %ct_param) = @$v;
+    $ct ||= '';
+    $ct = lc($ct);
+    $ct =~ s/\s+//;
+    my $charset = lc($ct_param{charset} || '');
+    $charset =~ s/^\s+//;
+    $charset =~ s/\s+\z//;
+    return ($ct, $charset);
+}
+
 sub discover {
     my $self = shift;
     my $url = shift or return $self->_fail("empty_url");
@@ -161,14 +177,12 @@ sub discover {
     }
 
     # (2) is content type YADIS document?
-    my $pct = parse_content_type($headers{'content-type'});
-    my $ctype = join '/', @{$pct}{qw(discrete composite)}; # really should be qw(type subtype)
+    my ($ctype, $charset) = parse_content_type($headers{'content-type'});
     if ($ctype eq 'application/xrds+xml') {
         #survey says Yes!
         $self->xrd_url($final_url);
 
-        my $charset = $pct->{attributes}->{charset};
-        if ($charset && (lc($charset) ne 'utf-8') && Encode::find_encoding($charset)) {
+        if ($charset && ($charset ne 'utf-8') && Encode::find_encoding($charset)) {
             # not UTF-8, but it's one of the ones we know about, so...
             Encode::from_to($xrd,$charset,'utf-8');
             # And now we are UTF-8, BUT...
@@ -282,7 +296,7 @@ Net::OpenID::Yadis - Perform Yadis discovery on URLs
 
 =head1 VERSION
 
-version 1.13
+version 1.14
 
 =head1 SYNOPSIS
 
