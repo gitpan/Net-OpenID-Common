@@ -5,7 +5,7 @@
       "Roger Crew <crew@cs.stanford.edu>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.101900, CPAN::Meta::Converter version 2.101670",
+   "generated_by" : "Dist::Zilla version 4.300020, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -17,26 +17,26 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "6.31"
+            "ExtUtils::MakeMaker" : "6.30"
          }
       },
       "runtime" : {
          "requires" : {
-            "Crypt::DH::GMP" : 0,
-            "Encode" : 0,
+            "Crypt::DH::GMP" : "0",
+            "Encode" : "0",
             "HTML::Parser" : "3.40",
-            "HTTP::Headers::Util" : 0,
-            "HTTP::Request" : 0,
-            "HTTP::Status" : 0,
-            "MIME::Base64" : 0,
-            "Math::BigInt" : 0,
-            "Time::Local" : 0,
-            "XML::Simple" : 0
+            "HTTP::Headers::Util" : "0",
+            "HTTP::Request" : "0",
+            "HTTP::Status" : "0",
+            "MIME::Base64" : "0",
+            "Math::BigInt" : "0",
+            "Time::Local" : "0",
+            "XML::Simple" : "0"
          }
       },
       "test" : {
          "requires" : {
-            "Test::More" : 0
+            "Test::More" : "0"
          }
       }
    },
@@ -49,10 +49,10 @@
       "homepage" : "http://groups.google.com/group/openid-perl",
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/wrog/Net-OpenID-Common.git",
-         "web" : "http://github.com/wrog/Net-OpenID-Common"
+         "url" : "git://github.com/vlyon/Net-OpenID-Common.git",
+         "web" : "http://github.com/vlyon/Net-OpenID-Common"
       }
    },
-   "version" : "1.14"
+   "version" : "1.15"
 }
 
