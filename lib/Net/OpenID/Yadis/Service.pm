@@ -1,6 +1,6 @@
 
 package Net::OpenID::Yadis::Service;
-{
+BEGIN {
   $Net::OpenID::Yadis::Service::VERSION = '1.15';
 }
 

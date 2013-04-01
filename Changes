@@ -1,8 +1,8 @@
-1.15      Oct 16 2012
+1.15      Apr 01 2013
 
-1.15      Oct 16 2012
+1.15      Apr 01 2013
 
-    * Use HTTP::Response to decode content (closes #78218)
+    * URIFetch->fetch now returns decoded_content (closes #78218)
 
 1.14      Nov 09 2011
 

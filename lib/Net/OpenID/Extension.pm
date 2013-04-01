@@ -1,6 +1,6 @@
 
 package Net::OpenID::Extension;
-{
+BEGIN {
   $Net::OpenID::Extension::VERSION = '1.15';
 }
 

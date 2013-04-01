@@ -1,6 +1,6 @@
 
 package Net::OpenID::Extension::SimpleRegistration;
-{
+BEGIN {
   $Net::OpenID::Extension::SimpleRegistration::VERSION = '1.15';
 }
 
@@ -37,7 +37,7 @@ sub received_response {
 }
 
 package Net::OpenID::Extension::SimpleRegistration::Request;
-{
+BEGIN {
   $Net::OpenID::Extension::SimpleRegistration::Request::VERSION = '1.15';
 }
 
@@ -137,7 +137,7 @@ sub policy_url {
 }
 
 package Net::OpenID::Extension::SimpleRegistration::Response;
-{
+BEGIN {
   $Net::OpenID::Extension::SimpleRegistration::Response::VERSION = '1.15';
 }
 
