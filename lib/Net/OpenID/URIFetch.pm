@@ -6,7 +6,7 @@ Net::OpenID::URIFetch - fetch and cache content from HTTP URLs
 
 =head1 VERSION
 
-version 1.15
+version 1.16
 
 =head1 DESCRIPTION
 
@@ -24,19 +24,14 @@ isn't much use outside of it. See URI::Fetch for a more general module.
 
 package Net::OpenID::URIFetch;
 BEGIN {
-  $Net::OpenID::URIFetch::VERSION = '1.15';
+  $Net::OpenID::URIFetch::VERSION = '1.16';
 }
 
 use HTTP::Request;
 use HTTP::Status;
 use strict;
 use warnings;
-use Carp;
-
-our $HAS_ZLIB;
-BEGIN {
-    $HAS_ZLIB = eval "use Compress::Zlib (); 1;";
-}
+use Carp();
 
 use constant URI_OK                => 200;
 use constant URI_MOVED_PERMANENTLY => 301;
@@ -95,9 +90,7 @@ sub fetch {
     }
 
     my $req = HTTP::Request->new(GET => $uri);
-    if ($HAS_ZLIB) {
-        $req->header('Accept-Encoding', 'gzip');
-    }
+    $req->header('Accept-Encoding', scalar HTTP::Message::decodable());
     if ($ref) {
         if (my $etag = ($ref->{Headers}->{etag})) {
             $req->header('If-None-Match', $etag);
@@ -119,9 +112,12 @@ sub fetch {
         return $cached_response->();
     }
     else {
-        my $content = $res->decoded_content;
         my $final_uri = $res->request->uri->as_string();
         my $final_cache_key = "URIFetch:${prefix}:${final_uri}";
+
+        my $content = $res->decoded_content             # Decode content-encoding and charset
+            || $res->decoded_content(charset => 'none') # Decode content-encoding
+            || $res->content;                           # Undecoded content
 
         if ($content_hook) {
             $content_hook->(\$content);
@@ -160,7 +156,7 @@ sub fetch {
 
 package Net::OpenID::URIFetch::Response;
 BEGIN {
-  $Net::OpenID::URIFetch::Response::VERSION = '1.15';
+  $Net::OpenID::URIFetch::Response::VERSION = '1.16';
 }
 
 use strict;
