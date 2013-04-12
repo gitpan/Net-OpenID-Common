@@ -1,7 +1,7 @@
 
 package Net::OpenID::Extension::SimpleRegistration;
 BEGIN {
-  $Net::OpenID::Extension::SimpleRegistration::VERSION = '1.16';
+  $Net::OpenID::Extension::SimpleRegistration::VERSION = '1.17';
 }
 
 use base qw(Net::OpenID::Extension);
@@ -38,7 +38,7 @@ sub received_response {
 
 package Net::OpenID::Extension::SimpleRegistration::Request;
 BEGIN {
-  $Net::OpenID::Extension::SimpleRegistration::Request::VERSION = '1.16';
+  $Net::OpenID::Extension::SimpleRegistration::Request::VERSION = '1.17';
 }
 
 use base qw(Net::OpenID::ExtensionMessage);
@@ -65,7 +65,7 @@ sub received {
     my ($class, $args) = @_;
 
     my $self = $class->new();
-    my $args = $args->{sreg} || {};
+    $args = $args->{sreg} || {};
 
     $self->required_fields($args->{required});
     $self->optional_fields($args->{optional});
@@ -138,7 +138,7 @@ sub policy_url {
 
 package Net::OpenID::Extension::SimpleRegistration::Response;
 BEGIN {
-  $Net::OpenID::Extension::SimpleRegistration::Response::VERSION = '1.16';
+  $Net::OpenID::Extension::SimpleRegistration::Response::VERSION = '1.17';
 }
 
 use base qw(Net::OpenID::ExtensionMessage);
@@ -181,7 +181,7 @@ sub new {
 sub received {
     my ($class, $args) = @_;
 
-    my $args = $args->{sreg} || {};
+    $args = $args->{sreg} || {};
     my %opts = ();
 
     foreach my $field_name (@{FIELDS()}) {
@@ -210,7 +210,7 @@ Net::OpenID::Extension::SimpleRegistration - Support for the Simple Registration
 
 =head1 VERSION
 
-version 1.16
+version 1.17
 
 =head1 SYNOPSIS
 

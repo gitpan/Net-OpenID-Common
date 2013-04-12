@@ -1,7 +1,7 @@
 
 package Net::OpenID::IndirectMessage;
 BEGIN {
-  $Net::OpenID::IndirectMessage::VERSION = '1.16';
+  $Net::OpenID::IndirectMessage::VERSION = '1.17';
 }
 
 use strict;
@@ -27,11 +27,6 @@ sub new {
         $getter = sub { $what->{$_[0]}; };
         $enumer = sub { keys(%$what); };
     }
-    elsif (UNIVERSAL::isa($what, "CGI")) {
-        # CGI automatically does what we need when method is POST
-        $getter = sub { scalar $what->param($_[0]); };
-        $enumer = sub { $what->param; };
-    }
     elsif (ref $what eq "Apache") {
         my %get;
         if ($what->method eq 'POST') {
@@ -43,19 +38,21 @@ sub new {
         $getter = sub { $get{$_[0]}; };
         $enumer = sub { keys(%get); };
     }
-    elsif ((ref $what eq "Apache::Request") || (ref $what eq "Apache2::Request")) {
-        # Apache::Request includes the POST and GET arguments in ->param
-        # when doing a POST request, which is close enough to what
-        # the spec requires.
-        $getter = sub { scalar $what->param($_[0]); };
-        $enumer = sub { $what->param; };
-    }
     elsif (ref $what eq "Plack::Request") {
         my $p = $what->method eq 'POST' ? $what->body_parameters : $what->query_parameters;
         $getter = sub { $p->get($_[0]); };
         $enumer = sub { keys %{$p}; };
     }
-    elsif (ref $what eq "CODE") {
+    elsif (ref $what ne "CODE") {
+        # assume an object that follows the CGI interface and has a param() method
+        # CGI does the right thing and omits query parameters if this is a POST
+        # others (Apache::Request, Apache2::Request) mix query and body params.
+        $getter = sub { scalar $what->param($_[0]); };
+        $enumer = sub { $what->param; };
+    }
+
+    else {
+        # CODE reference
         my @keys = ();
         my $enumerated;
         $getter = $what;
@@ -81,10 +78,6 @@ sub new {
             }
             return @keys;
         }
-    }
-    else {
-        $what = 'undef' if !defined $what;
-        Carp::croak("Unknown parameter type ($what)");
     }
     $self->{getter} = $getter;
     $self->{enumer} = $enumer;
@@ -250,7 +243,7 @@ Net::OpenID::IndirectMessage - Class representing a collection of namespaced arg
 
 =head1 VERSION
 
-version 1.16
+version 1.17
 
 =head1 DESCRIPTION
 
@@ -264,13 +257,12 @@ for Simple Registration.
 
 This class can operate on
 a normal hashref,
-a L<CGI> object,
+a L<CGI> object or any object with a C<param> method that behaves similarly
+(L<Apache::Request>, L<Apache2::Request>, L<Mojo::Parameters>,...),
 an L<Apache> object,
-an L<Apache::Request> object,
-an L<Apache2::Request> object,
 a L<Plack::Request> object, or
-an arbitrary C<CODE> ref that takes a key name as its first parameter and returns a value.
-However, if you use a coderef then extension arguments are not supported.
+an arbitrary C<CODE> ref that when given a key name as its first parameter
+and returns a value and if given no arguments returns a list of all keys present.
 
 If you pass in a hashref or a coderef it is your responsibility as the caller
 to check the HTTP request method and pass in the correct set of arguments.
@@ -307,6 +299,8 @@ access it through a L<Net::OpenID::Consumer> instance.
 
 =head1 METHODS
 
+=over 4
+
 =item B<protocol_version>
 
 Currently returns 1 or 2, according as this is an OpenID 1.0/1.1 or an OpenID 2.0 message.
@@ -319,3 +313,5 @@ Takes an extension namespace and returns true if the named extension is used in 
 
 Takes an extension namespace and an optional parameter name, returns the parameter value,
 or if no parameter given, the parameter value.
+
+=back

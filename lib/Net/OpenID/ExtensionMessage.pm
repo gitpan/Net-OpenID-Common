@@ -1,7 +1,7 @@
 
 package Net::OpenID::ExtensionMessage;
 BEGIN {
-  $Net::OpenID::ExtensionMessage::VERSION = '1.16';
+  $Net::OpenID::ExtensionMessage::VERSION = '1.17';
 }
 
 use strict;
@@ -12,7 +12,7 @@ Net::OpenID::ExtensionMessage - Base class for extension messages
 
 =head1 VERSION
 
-version 1.16
+version 1.17
 
 =head1 DESCRIPTION
 
