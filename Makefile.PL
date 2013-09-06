@@ -4,38 +4,38 @@ use warnings;
 
 
 
-use ExtUtils::MakeMaker 6.31;
+use ExtUtils::MakeMaker 6.30;
 
 
 
 my %WriteMakefileArgs = (
-  'ABSTRACT' => 'Libraries shared between Net::OpenID::Consumer and Net::OpenID::Server',
-  'AUTHOR' => 'Robert Norris <rob@eatenbyagrue.org>, Roger Crew <crew@cs.stanford.edu>',
-  'BUILD_REQUIRES' => {
-    'Test::More' => '0'
+  "ABSTRACT" => "Libraries shared between Net::OpenID::Consumer and Net::OpenID::Server",
+  "AUTHOR" => "Robert Norris <rob\@eatenbyagrue.org>, Roger Crew <crew\@cs.stanford.edu>",
+  "BUILD_REQUIRES" => {
+    "Test::More" => 0
   },
-  'CONFIGURE_REQUIRES' => {
-    'ExtUtils::MakeMaker' => '6.31'
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
   },
-  'DISTNAME' => 'Net-OpenID-Common',
-  'EXE_FILES' => [],
-  'LICENSE' => 'perl',
-  'NAME' => 'Net::OpenID::Common',
-  'PREREQ_PM' => {
-    'Crypt::DH::GMP' => '0',
-    'Encode' => '0',
-    'HTML::Parser' => '3.40',
-    'HTTP::Headers::Util' => '0',
-    'HTTP::Request' => '0',
-    'HTTP::Status' => '0',
-    'MIME::Base64' => '0',
-    'Math::BigInt' => '0',
-    'Time::Local' => '0',
-    'XML::Simple' => '0'
+  "DISTNAME" => "Net-OpenID-Common",
+  "EXE_FILES" => [],
+  "LICENSE" => "perl",
+  "NAME" => "Net::OpenID::Common",
+  "PREREQ_PM" => {
+    "Crypt::DH::GMP" => "0.00011",
+    "Encode" => 0,
+    "HTML::Parser" => "3.40",
+    "HTTP::Headers::Util" => 0,
+    "HTTP::Request" => 0,
+    "HTTP::Status" => 0,
+    "MIME::Base64" => 0,
+    "Math::BigInt" => 0,
+    "Time::Local" => 0,
+    "XML::Simple" => 0
   },
-  'VERSION' => '1.17',
-  'test' => {
-    'TESTS' => 't/*.t'
+  "VERSION" => "1.18",
+  "test" => {
+    "TESTS" => "t/*.t"
   }
 );
 

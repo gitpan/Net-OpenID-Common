@@ -6,7 +6,7 @@ Net::OpenID::URIFetch - fetch and cache content from HTTP URLs
 
 =head1 VERSION
 
-version 1.17
+version 1.18
 
 =head1 DESCRIPTION
 
@@ -23,8 +23,8 @@ isn't much use outside of it. See URI::Fetch for a more general module.
 =cut
 
 package Net::OpenID::URIFetch;
-BEGIN {
-  $Net::OpenID::URIFetch::VERSION = '1.17';
+{
+  $Net::OpenID::URIFetch::VERSION = '1.18';
 }
 
 use HTTP::Request;
@@ -155,8 +155,8 @@ sub fetch {
 }
 
 package Net::OpenID::URIFetch::Response;
-BEGIN {
-  $Net::OpenID::URIFetch::Response::VERSION = '1.17';
+{
+  $Net::OpenID::URIFetch::Response::VERSION = '1.18';
 }
 
 use strict;
