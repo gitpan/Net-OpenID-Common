@@ -1,6 +1,6 @@
 package Net::OpenID::Yadis;
 {
-  $Net::OpenID::Yadis::VERSION = '1.18';
+  $Net::OpenID::Yadis::VERSION = '1.19';
 }
 
 use strict;
@@ -282,7 +282,7 @@ Net::OpenID::Yadis - Perform Yadis discovery on URLs
 
 =head1 VERSION
 
-version 1.18
+version 1.19
 
 =head1 SYNOPSIS
 

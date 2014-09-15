@@ -1,7 +1,7 @@
 
 package Net::OpenID::Extension;
 {
-  $Net::OpenID::Extension::VERSION = '1.18';
+  $Net::OpenID::Extension::VERSION = '1.19';
 }
 
 use strict;
@@ -12,7 +12,7 @@ Net::OpenID::Extension - Base class for OpenID extensions
 
 =head1 VERSION
 
-version 1.18
+version 1.19
 
 =head1 METHODS
 

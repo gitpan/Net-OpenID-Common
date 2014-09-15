@@ -1,7 +1,7 @@
 
 package Net::OpenID::Extension::SimpleRegistration;
 {
-  $Net::OpenID::Extension::SimpleRegistration::VERSION = '1.18';
+  $Net::OpenID::Extension::SimpleRegistration::VERSION = '1.19';
 }
 
 use base qw(Net::OpenID::Extension);
@@ -38,7 +38,7 @@ sub received_response {
 
 package Net::OpenID::Extension::SimpleRegistration::Request;
 {
-  $Net::OpenID::Extension::SimpleRegistration::Request::VERSION = '1.18';
+  $Net::OpenID::Extension::SimpleRegistration::Request::VERSION = '1.19';
 }
 
 use base qw(Net::OpenID::ExtensionMessage);
@@ -138,7 +138,7 @@ sub policy_url {
 
 package Net::OpenID::Extension::SimpleRegistration::Response;
 {
-  $Net::OpenID::Extension::SimpleRegistration::Response::VERSION = '1.18';
+  $Net::OpenID::Extension::SimpleRegistration::Response::VERSION = '1.19';
 }
 
 use base qw(Net::OpenID::ExtensionMessage);
@@ -210,7 +210,7 @@ Net::OpenID::Extension::SimpleRegistration - Support for the Simple Registration
 
 =head1 VERSION
 
-version 1.18
+version 1.19
 
 =head1 SYNOPSIS
 

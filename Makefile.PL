@@ -26,6 +26,7 @@ my %WriteMakefileArgs = (
     "Encode" => 0,
     "HTML::Parser" => "3.40",
     "HTTP::Headers::Util" => 0,
+    "HTTP::Message" => "5.814",
     "HTTP::Request" => 0,
     "HTTP::Status" => 0,
     "MIME::Base64" => 0,
@@ -33,7 +34,7 @@ my %WriteMakefileArgs = (
     "Time::Local" => 0,
     "XML::Simple" => 0
   },
-  "VERSION" => "1.18",
+  "VERSION" => "1.19",
   "test" => {
     "TESTS" => "t/*.t"
   }

@@ -26,6 +26,7 @@
             "Encode" : "0",
             "HTML::Parser" : "3.40",
             "HTTP::Headers::Util" : "0",
+            "HTTP::Message" : "5.814",
             "HTTP::Request" : "0",
             "HTTP::Status" : "0",
             "MIME::Base64" : "0",
@@ -53,6 +54,6 @@
          "web" : "http://github.com/wrog/Net-OpenID-Common"
       }
    },
-   "version" : "1.18"
+   "version" : "1.19"
 }
 

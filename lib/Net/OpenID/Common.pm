@@ -1,7 +1,7 @@
 
 package Net::OpenID::Common;
 {
-  $Net::OpenID::Common::VERSION = '1.18';
+  $Net::OpenID::Common::VERSION = '1.19';
 }
 
 =head1 NAME
@@ -10,7 +10,7 @@ Net::OpenID::Common - Libraries shared between Net::OpenID::Consumer and Net::Op
 
 =head1 VERSION
 
-version 1.18
+version 1.19
 
 =head1 DESCRIPTION
 
@@ -45,7 +45,7 @@ Maintained by Roger Crew <crew@cs.stanford.edu>
 # like this to avoid confusion.
 package OpenID::util;
 {
-  $OpenID::util::VERSION = '1.18';
+  $OpenID::util::VERSION = '1.19';
 }
 
 use Crypt::DH::GMP;
